@@ -1,9 +1,14 @@
 package kij_chat_server;
 
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /** original ->http://www.dreamincode.net/forums/topic/262304-simple-client-and-server-chat-program/
  * 
@@ -49,8 +54,9 @@ public class Client implements Runnable{
                                         // param LOGIN <userName> <pass>
                                         if (input.split(" ")[0].toLowerCase().equals("login") == true) {
                                             String[] vals = input.split(" ");
+                                            String mdString = getMD5(vals[2]);
                                             
-                                            if (this._userlist.contains(new Pair(vals[1], vals[2])) == true) {
+                                            if (this._userlist.contains(new Pair(vals[1], mdString)) == true) {
                                                 if (this.login == false) {
                                                     this._loginlist.add(new Pair(this.socket, vals[1]));
                                                     this.username = vals[1];
@@ -199,6 +205,21 @@ public class Client implements Runnable{
 			e.printStackTrace();//MOST LIKELY THERE WONT BE AN ERROR BUT ITS GOOD TO CATCH
 		}	
 	}
+
+    private String getMD5(String val) {
+        String hashtext = null;
+        try {
+            MessageDigest md=MessageDigest.getInstance("MD5");
+            byte[] messageDigest=md.digest(val.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            hashtext = number.toString(16);
+
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        return hashtext;
+    }
 
 }
 
