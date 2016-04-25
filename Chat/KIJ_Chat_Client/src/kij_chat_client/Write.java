@@ -36,6 +36,29 @@ public class Write implements Runnable {
 			while (keepGoing)//WHILE THE PROGRAM IS RUNNING
 			{						
 				String input = chat.nextLine();	//SET NEW VARIABLE input TO THE VALUE OF WHAT THE CLIENT TYPED IN
+				String cek = input.split(" ")[0].toLowerCase();
+				if(cek.equals("login") || cek.equals("logout") || cek.equals("cg")){
+					
+				}
+				else if(cek.equals("bm")){
+					String[] vals = input.split(" ");
+					String messageOut = "";
+                    for (int j = 1; j<vals.length; j++) {
+                        messageOut += vals[j] + " ";
+                    }
+					byte[] encrypted = Amankan.encrypt(messageOut, "password");
+					input = vals[0] + " " + new String(encrypted);
+				}
+				else {
+					String[] vals = input.split(" ");
+					String messageOut = "";
+                    for (int j = 2; j<vals.length; j++) {
+                        messageOut += vals[j] + " ";
+                    }
+					byte[] encrypted = Amankan.encrypt(messageOut, "password");
+					input = vals[0] + " " + vals[1] + " " + new String(encrypted);
+				}
+				
 				out.println(input);//SEND IT TO THE SERVER
 				out.flush();//FLUSH THE STREAM
                                 

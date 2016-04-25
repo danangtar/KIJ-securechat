@@ -41,23 +41,23 @@ public class Client implements Runnable {
 //				if(in.hasNext())//IF THE SERVER SENT US SOMETHING
 //					System.out.println(in.nextLine());//PRINT IT OUT
 //			}
-                        
-                        Read reader = new Read(in, log);
+            
+			Read reader = new Read(in, log);
 			
 			Thread tr = new Thread(reader);
 			tr.start();
                         
-                        Write writer = new Write(chat, out, log);
+            Write writer = new Write(chat, out, log);
 			
 			Thread tw = new Thread(writer);
 			tw.start();
                         
-//                        System.out.println(tr.isAlive());
-                        while (tr.isAlive() == true) {
-                            if (tr.isAlive() == false && tw.isAlive() == false) {
-                                socket.close();
-                            }
-                        }
+//          System.out.println(tr.isAlive());
+            while (tr.isAlive() == true) {
+                if (tr.isAlive() == false && tw.isAlive() == false) {
+                    socket.close();
+                }
+            }
 		}
 		catch (Exception e)
 		{

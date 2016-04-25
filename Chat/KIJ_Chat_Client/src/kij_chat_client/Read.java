@@ -34,17 +34,29 @@ public class Read implements Runnable {
 			while (keepGoing)//WHILE THE PROGRAM IS RUNNING
 			{						
 				if(this.in.hasNext()) {
-                                                                   //IF THE SERVER SENT US SOMETHING
-                                        input = this.in.nextLine();
+					//IF THE SERVER SENT US SOMETHING
+                    input = this.in.nextLine();
+                    String cek = input.split(" ")[0].toLowerCase();
+    				if(cek.equals("success") || cek.equals("fail")){
+    					
+    				}
+    				else{
+    					String[] vals = input.split(": ");
+    					byte[] b = vals[1].getBytes();
+                        String decrypted = Amankan.decrypt(b, "password");
+                        input = vals[0] + ": " + decrypted;
+    				}
+                    
 					System.out.println(input);//PRINT IT OUT
-                                        if (input.split(" ")[0].toLowerCase().equals("success")) {
-                                            if (input.split(" ")[1].toLowerCase().equals("logout")) {
-                                                keepGoing = false;
-                                            } else if (input.split(" ")[1].toLowerCase().equals("login")) {
-                                                log.clear();
-                                                log.add("true");
-                                            }
-                                        }
+                    
+					if (input.split(" ")[0].toLowerCase().equals("success")) {
+                        if (input.split(" ")[1].toLowerCase().equals("logout")) {
+                            keepGoing = false;
+                        } else if (input.split(" ")[1].toLowerCase().equals("login")) {
+                            log.clear();
+                            log.add("true");
+                        }
+                    }
                                         
                                 }
                                 
