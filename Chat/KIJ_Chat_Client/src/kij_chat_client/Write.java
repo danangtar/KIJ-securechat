@@ -7,6 +7,7 @@ package kij_chat_client;
 
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -31,48 +32,62 @@ public class Write implements Runnable {
 	@Override
 	public void run()//INHERIT THE RUN METHOD FROM THE Runnable INTERFACE
 	{
-		try
-		{
-			while (keepGoing)//WHILE THE PROGRAM IS RUNNING
-			{						
-				String input = chat.nextLine();	//SET NEW VARIABLE input TO THE VALUE OF WHAT THE CLIENT TYPED IN
-				String cek = input.split(" ")[0].toLowerCase();
-				if(cek.equals("login") || cek.equals("logout") || cek.equals("cg")){
-					
-				}
-				else if(cek.equals("bm")){
-					String[] vals = input.split(" ");
-					String messageOut = "";
-                    for (int j = 1; j<vals.length; j++) {
-                        messageOut += vals[j] + " ";
+            try
+            {
+                while (keepGoing)//WHILE THE PROGRAM IS RUNNING
+                {						
+                    String input = chat.nextLine();	//SET NEW VARIABLE input TO THE VALUE OF WHAT THE CLIENT TYPED IN
+                    String cek = input.split(" ")[0].toLowerCase();
+                    if(cek.equals("login") || cek.equals("logout") || cek.equals("cg")){
+                        out.println(input);//SEND IT TO THE SERVER
+                        out.flush();//FLUSH THE STREAM
                     }
-					byte[] encrypted = Amankan.encrypt(messageOut, "password");
-					input = vals[0] + " " + new String(encrypted);
-				}
-				else {
-					String[] vals = input.split(" ");
-					String messageOut = "";
-                    for (int j = 2; j<vals.length; j++) {
-                        messageOut += vals[j] + " ";
+                    else if(cek.equals("pm")){
+                        String[] vals = input.split(" ");
+                        String messageOut = "";
+                        for (int j = 2; j<vals.length; j++) {
+                            messageOut += vals[j] + " ";
+                        }
+//                        byte[] encrypted = Amankan.encrypt(messageOut, "password");
+//                        input = vals[0] + " " + new String(encrypted);   
+                        
+                        byte[] key = "Key".getBytes();
+                        RC4 rc4 = new RC4(key);
+//                        String message = "";
+//                        System.out.println("Message: " + message);
+                        String cipherText = rc4.encrypt(messageOut);
+//                        System.out.println("Encrypted: " + cipherText);
+//                        String decrypted = rc4.decrypt(cipherText);
+//                        System.out.print("Decrypted: " + decrypted);
+                        input = vals[0] + " " +vals[1]+" " + cipherText;
+                        out.println(input);//SEND IT TO THE SERVER
+                        out.flush();//FLUSH THE STREAM
                     }
-					byte[] encrypted = Amankan.encrypt(messageOut, "password");
-					input = vals[0] + " " + vals[1] + " " + new String(encrypted);
-				}
-				
-				out.println(input);//SEND IT TO THE SERVER
-				out.flush();//FLUSH THE STREAM
-                                
-                                if (input.contains("logout")) {
-                                    if (log.contains("true"))
-                                        keepGoing = false;
-                                    
-                                }
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();//MOST LIKELY WONT BE AN ERROR, GOOD PRACTICE TO CATCH THOUGH
-		} 
+                    else{
+//                        String[] vals = input.split(" ");
+//                        String messageOut = "";
+//                        for (int j = 2; j<vals.length; j++) {
+//                            messageOut += vals[j] + " ";
+//                        }
+//                        byte[] encrypted = Amankan.encrypt(messageOut, "password");
+//                        input = vals[0] + " " + vals[1] + " " + new String(encrypted);
+//                        String decrypted = Amankan.decrypt(encrypted, "password");
+//     
+//                        System.out.println("Decrypted text: " + decrypted);
+                    }
+
+                    
+
+                    if (input.contains("logout")) {
+                        if (log.contains("true"))
+                            keepGoing = false;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                    e.printStackTrace();//MOST LIKELY WONT BE AN ERROR, GOOD PRACTICE TO CATCH THOUGH
+            } 
 	}
 
 }

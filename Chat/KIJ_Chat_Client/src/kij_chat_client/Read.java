@@ -29,42 +29,48 @@ public class Read implements Runnable {
         @Override
 	public void run()//INHERIT THE RUN METHOD FROM THE Runnable INTERFACE
 	{
-		try
-		{
-			while (keepGoing)//WHILE THE PROGRAM IS RUNNING
-			{						
-				if(this.in.hasNext()) {
-					//IF THE SERVER SENT US SOMETHING
-                    input = this.in.nextLine();
-                    String cek = input.split(" ")[0].toLowerCase();
-    				if(cek.equals("success") || cek.equals("fail")){
-    					
-    				}
-    				else{
-    					String[] vals = input.split(": ");
-    					byte[] b = vals[1].getBytes();
-                        String decrypted = Amankan.decrypt(b, "password");
-                        input = vals[0] + ": " + decrypted;
-    				}
-                    
-					System.out.println(input);//PRINT IT OUT
-                    
-					if (input.split(" ")[0].toLowerCase().equals("success")) {
-                        if (input.split(" ")[1].toLowerCase().equals("logout")) {
-                            keepGoing = false;
-                        } else if (input.split(" ")[1].toLowerCase().equals("login")) {
-                            log.clear();
-                            log.add("true");
+            try
+            {
+                while (keepGoing)//WHILE THE PROGRAM IS RUNNING
+                {						
+                    if(this.in.hasNext()) {
+                        //IF THE SERVER SENT US SOMETHING
+                        input = this.in.nextLine();
+                        String cek = input.split(" ")[0].toLowerCase();
+
+                        if(cek.equals("success") || cek.equals("fail")){
+
                         }
+                        else{
+                            byte[] key = "Key".getBytes();
+                            RC4 rc4 = new RC4(key);
+                            String[] vals = input.split(": ");
+//                            byte[] b = vals[1].getBytes();
+//                            String decrypted = Amankan.decrypt(b, "password");
+                            String decrypted = rc4.decrypt(vals[1]);
+
+                            input = vals[0] + ": " + decrypted;
+                        }
+
+
+                        System.out.println(input);//PRINT IT OUT
+
+                        if (input.split(" ")[0].toLowerCase().equals("success")) {
+                            if (input.split(" ")[1].toLowerCase().equals("logout")) {
+                                keepGoing = false;
+                            } else if (input.split(" ")[1].toLowerCase().equals("login")) {
+                                log.clear();
+                                log.add("true");
+                            }
+                        }
+
                     }
-                                        
-                                }
-                                
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();//MOST LIKELY WONT BE AN ERROR, GOOD PRACTICE TO CATCH THOUGH
-		} 
+
+                }
+            }
+            catch (Exception e)
+            {
+                    e.printStackTrace();//MOST LIKELY WONT BE AN ERROR, GOOD PRACTICE TO CATCH THOUGH
+            } 
 	}
 }
