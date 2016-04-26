@@ -37,38 +37,23 @@ public class Read implements Runnable {
                         //IF THE SERVER SENT US SOMETHING
                         input = this.in.nextLine();
                         String cek = input.split(" ")[0].toLowerCase();
-                        String cek2 = input.split(" ")[1].toLowerCase();
 
                         if(cek.equals("success") || cek.equals("fail")){
 
                         }
-                                                
-                        else if(cek2.equals("@")){
-                            String[] vals = input.split(" ");
-                            byte[] key=vals[2].getBytes();
-                            RC4 rc4 = new RC4(key);
-                            String decrypted = rc4.decrypt(vals[4]);
-
-                            input = vals[0] + " " + vals[1] + " " + vals[2] + " " + vals[3] + " " + decrypted;
-                        }
-                        
-                        else if(cek2.equals("<broadcast>:")){
-                            String[] vals = input.split(" ");
-                            byte[] key=vals[0].getBytes();
-                            RC4 rc4 = new RC4(key);
-                            String decrypted = rc4.decrypt(vals[2]);
-
-                            input = vals[0] + " " + vals[1] + " " + decrypted;
-                        }
-                        
-                        else {
+                        else{
+//                            byte[] key = "Key".getBytes();
+                            
                             String[] vals = input.split(": ");
                             byte[] key=vals[0].getBytes();
                             RC4 rc4 = new RC4(key);
+//                            byte[] b = vals[1].getBytes();
+//                            String decrypted = Amankan.decrypt(b, "password");
                             String decrypted = rc4.decrypt(vals[1]);
 
                             input = vals[0] + ": " + decrypted;
                         }
+
 
                         System.out.println(input);//PRINT IT OUT
 
