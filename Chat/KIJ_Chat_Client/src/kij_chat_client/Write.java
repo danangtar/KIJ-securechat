@@ -63,7 +63,7 @@ public class Write implements Runnable {
                         out.println(input);//SEND IT TO THE SERVER
                         out.flush();//FLUSH THE STREAM
                     }
-                    else{
+                    else if(cek.equals("bm")){
 //                        String[] vals = input.split(" ");
 //                        String messageOut = "";
 //                        for (int j = 2; j<vals.length; j++) {
@@ -74,6 +74,21 @@ public class Write implements Runnable {
 //                        String decrypted = Amankan.decrypt(encrypted, "password");
 //     
 //                        System.out.println("Decrypted text: " + decrypted);
+                        String[] vals = input.split(" ");
+                        String messageOut = "";
+                        for (int j = 2; j<vals.length; j++) {
+                            messageOut += vals[j] + " ";
+                        }
+                        byte[] key = "Key".getBytes();
+                        RC4 rc4 = new RC4(key);
+                        String cipherText = rc4.encrypt(messageOut);
+                        input = vals[0] + " " + cipherText;
+                        
+                        out.println(input);//SEND IT TO THE SERVER
+                        out.flush();//FLUSH THE STREAM
+                    }
+                    else{
+                        
                     }
 
                     
