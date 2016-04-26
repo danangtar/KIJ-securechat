@@ -19,6 +19,7 @@ public class Write implements Runnable {
     
 	private Scanner chat;
         private PrintWriter out;
+        private String username;
         boolean keepGoing = true;
         ArrayList<String> log;
 	
@@ -39,6 +40,7 @@ public class Write implements Runnable {
                     String input = chat.nextLine();	//SET NEW VARIABLE input TO THE VALUE OF WHAT THE CLIENT TYPED IN
                     String cek = input.split(" ")[0].toLowerCase();
                     if(cek.equals("login") || cek.equals("logout") || cek.equals("cg")){
+                        username=input.split(" ")[1];
                         out.println(input);//SEND IT TO THE SERVER
                         out.flush();//FLUSH THE STREAM
                     }
@@ -51,7 +53,8 @@ public class Write implements Runnable {
 //                        byte[] encrypted = Amankan.encrypt(messageOut, "password");
 //                        input = vals[0] + " " + new String(encrypted);   
                         
-                        byte[] key = "Key".getBytes();
+//                        byte[] key = "Key".getBytes();
+                        byte[] key=username.getBytes();
                         RC4 rc4 = new RC4(key);
 //                        String message = "";
 //                        System.out.println("Message: " + message);
@@ -79,7 +82,8 @@ public class Write implements Runnable {
                         for (int j = 2; j<vals.length; j++) {
                             messageOut += vals[j] + " ";
                         }
-                        byte[] key = "Key".getBytes();
+//                        byte[] key = "Key".getBytes();
+                        byte[] key=vals[1].getBytes();
                         RC4 rc4 = new RC4(key);
                         String cipherText = rc4.encrypt(messageOut);
                         input = vals[0] + " " + cipherText;

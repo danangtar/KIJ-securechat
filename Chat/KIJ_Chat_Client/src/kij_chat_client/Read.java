@@ -42,9 +42,11 @@ public class Read implements Runnable {
 
                         }
                         else{
-                            byte[] key = "Key".getBytes();
-                            RC4 rc4 = new RC4(key);
+//                            byte[] key = "Key".getBytes();
+                            
                             String[] vals = input.split(": ");
+                            byte[] key=vals[0].getBytes();
+                            RC4 rc4 = new RC4(key);
 //                            byte[] b = vals[1].getBytes();
 //                            String decrypted = Amankan.decrypt(b, "password");
                             String decrypted = rc4.decrypt(vals[1]);
