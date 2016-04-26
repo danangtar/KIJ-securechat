@@ -41,62 +41,36 @@ public class Write implements Runnable {
                     String cek = input.split(" ")[0].toLowerCase();
                     if(cek.equals("login") || cek.equals("logout") || cek.equals("cg")){
                         username=input.split(" ")[1];
-                        out.println(input);//SEND IT TO THE SERVER
-                        out.flush();//FLUSH THE STREAM
                     }
-                    else if(cek.equals("pm")){
+                    else {
                         String[] vals = input.split(" ");
                         String messageOut = "";
-                        for (int j = 2; j<vals.length; j++) {
-                            messageOut += vals[j] + " ";
-                        }
-//                        byte[] encrypted = Amankan.encrypt(messageOut, "password");
-//                        input = vals[0] + " " + new String(encrypted);   
-                        
-//                        byte[] key = "Key".getBytes();
-                        byte[] key=username.getBytes();
-                        RC4 rc4 = new RC4(key);
-//                        String message = "";
-//                        System.out.println("Message: " + message);
-                        String cipherText = rc4.encrypt(messageOut);
-//                        System.out.println("Encrypted: " + cipherText);
-//                        String decrypted = rc4.decrypt(cipherText);
-//                        System.out.print("Decrypted: " + decrypted);
-                        input = vals[0] + " " +vals[1]+" " + cipherText;
-                        out.println(input);//SEND IT TO THE SERVER
-                        out.flush();//FLUSH THE STREAM
-                    }
-                    else if(cek.equals("bm")){
-//                        String[] vals = input.split(" ");
-//                        String messageOut = "";
-//                        for (int j = 2; j<vals.length; j++) {
-//                            messageOut += vals[j] + " ";
-//                        }
-//                        byte[] encrypted = Amankan.encrypt(messageOut, "password");
-//                        input = vals[0] + " " + vals[1] + " " + new String(encrypted);
-//                        String decrypted = Amankan.decrypt(encrypted, "password");
-//     
-//                        System.out.println("Decrypted text: " + decrypted);
-                        String[] vals = input.split(" ");
-                        String messageOut = "";
-                        for (int j = 2; j<vals.length; j++) {
-                            messageOut += vals[j] + " ";
-                        }
-//                        byte[] key = "Key".getBytes();
-                        byte[] key=vals[1].getBytes();
-                        RC4 rc4 = new RC4(key);
-                        String cipherText = rc4.encrypt(messageOut);
-                        input = vals[0] + " " + cipherText;
-                        
-                        out.println(input);//SEND IT TO THE SERVER
-                        out.flush();//FLUSH THE STREAM
-                    }
-                    else{
-                        
-                    }
+                        if(cek.equals("bm")){
+                            for (int j = 1; j<vals.length; j++) {
+                                messageOut += vals[j] + " ";
+                            }
 
+                            byte[] key=username.getBytes();
+                            RC4 rc4 = new RC4(key);
+                            String cipherText = rc4.encrypt(messageOut);
+                            input = vals[0] + " " + cipherText;
+                        }
+
+                        else{
+                            for (int j = 2; j<vals.length; j++) {
+                                messageOut += vals[j] + " ";
+                            }
+
+                            byte[] key=username.getBytes();
+                            RC4 rc4 = new RC4(key);
+                            String cipherText = rc4.encrypt(messageOut);
+                            input = vals[0] + " " +vals[1]+" " + cipherText;
+                        }
+                    }
+                                        
+                    out.println(input);//SEND IT TO THE SERVER
+                    out.flush();//FLUSH THE STREAM
                     
-
                     if (input.contains("logout")) {
                         if (log.contains("true"))
                             keepGoing = false;
